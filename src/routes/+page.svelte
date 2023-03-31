@@ -1,2 +1,15 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script lang="ts">
+import { signIn, signOut } from '$lib/auth'
+import { supabase } from '$lib/db'
+import { onMount } from 'svelte'
+import type { AuthChangeEvent, Session } from '@supabase/supabase-js'
+
+onMount(() => {
+  supabase.auth.onAuthStateChange(( event: AuthChangeEvent, session: Session | null ) => {
+    console.log(event, session)
+  })
+})
+
+</script>
+<button style="margin-top: 12px;" on:click={() => { signIn('github') }}>OAuth Login</button>
+<button style="margin-top: 12px;" on:click={() => { signOut() }}>OAuth Logout</button>
